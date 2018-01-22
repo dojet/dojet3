@@ -6,8 +6,7 @@ require DOJET.'kernel/Autoloader.php';
 
 $autoloader = Autoloader::getInstance();
 $autoloader->addAutoloadPath([
-    'kernel/',
+    DOJET.'kernel/',
+    DOJET.'util/',
 ]);
 Autoloader::addAutoloader([$autoloader, 'autoload']);
-
-Assert::assert_(false, 'aaa');

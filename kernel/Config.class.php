@@ -1,4 +1,10 @@
 <?php
+/**
+ * Config
+ *
+ * @author liyan
+ * @since 2013
+ */
 class Config {
 
     private static $config;
@@ -9,8 +15,7 @@ class Config {
             $filename = $confFile.'.conf.php';
         }
         Assert::assertFileExists($filename, 'config file not exist! '.$filename);
-        $config = require($filename);
-        array_merge(self::$config, $config);
+        require($filename);
     }
 
     public static function load($files) {
@@ -19,27 +24,28 @@ class Config {
         }
     }
 
-    public static function set($keyPath, $value, &$config = null) {
-        $key = strtok($keyPath, '.');
+    public static function set($keyPath, $conf, &$config = null) {
         if (is_null($config)) {
             $config = &self::$config;
         }
+        $key = strtok($keyPath, '.');
         while ($key) {
             if (!is_array($config)) {
-                $config = array();
+                $config = [];
             }
 
             if (!key_exists($key, (array)$config)) {
-                $config[$key] = null;
+                $config[$key] = [];
             }
             $config = &$config[$key];
             $key = strtok('.');
         }
-        $config = $value;
-    }
 
-    function __invoke($keyPath, $value = null, &$config = null) {
-
+        if (is_array($conf)) {
+            $config = array_merge_recursive($config, $conf);
+        } else {
+            $config = $conf;
+        }
     }
 
     /**
@@ -49,30 +55,13 @@ class Config {
      * @param string $keyPath
      * @return mix
      */
-    public static function configForKeyPath($keyPath, $config = null, $default = null) {
+    public static function get($keyPath, $config = null, $default = null) {
         if (is_null($config)) {
             $config = self::$config;
         }
         $value = XPath::path($keyPath, $config);
         if (is_null($value)) {
             $value = $default;
-        }
-        return $value;
-    }
-
-    public static function &configRefForKeyPath($keyPath) {
-        $key = strtok($keyPath, '.');
-        $value = &self::$config;
-        while ($key) {
-            if (!is_array($value)) {
-                $value = array();
-            }
-
-            if (!key_exists($key, (array)$value)) {
-                $value[$key] = null;
-            }
-            $value = &$value[$key];
-            $key = strtok('.');
         }
         return $value;
     }
@@ -84,14 +73,23 @@ class Config {
      * @param string $runtime
      * @return mix
      */
-    public static function runtimeConfigForKeyPath($keyPath, $runtime = null) {
-        ($runtime !== null) or $runtime = Config::configForKeyPath('runtime');
+    public static function getByRuntime($keyPath, $runtime = null, $config = null, $default = null) {
+        is_null($runtime) and $runtime = Config::get('runtime');
+        if (is_null($runtime)) {
+            throw new Exception("runtime not set", 1);
+        }
+
         if (false !== strpos($keyPath, '.$.')) {
             $runtimeKeypath = str_replace('.$.', '.'.$runtime.'.', $keyPath);
         } else {
             $runtimeKeypath = $keyPath.'.'.$runtime;
         }
-        return Config::configForKeyPath($runtimeKeypath);
+
+        return Config::get($runtimeKeypath, $config, $default);
+    }
+
+    public static function conf() {
+        return self::$config;
     }
 
 }
