@@ -10,7 +10,7 @@ class Config {
     private static $config;
 
     private static function _loadConfig($confFile) {
-        $filename = sprintf("%s.%s.conf.php", $confFile, MRuntime::currentRuntime());
+        $filename = sprintf("%s/%s.conf.php", $confFile, Config::get('runtime'));
         if (!file_exists($filename)) {
             $filename = $confFile.'.conf.php';
         }
@@ -19,8 +19,12 @@ class Config {
     }
 
     public static function load($files) {
-        foreach (func_get_args() as $confFile) {
-            self::_loadConfig($confFile);
+        if (is_array($files)) {
+            foreach ($files as $confFile) {
+                self::_loadConfig($confFile);
+            }
+        } else {
+            self::_loadConfig($files);
         }
     }
 
