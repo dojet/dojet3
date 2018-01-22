@@ -29,7 +29,7 @@ class Assert {
             $line = $trace['line'];
         }
 
-        Trace::fatal('assert failed. '.$message.', '.$file.', '.$line);
+        // Trace::fatal('assert failed. '.$message.', '.$file.', '.$line);
         println('assert failed. '.$message.', '.$file.', '.$line);
 
         // assert($condition);
@@ -89,8 +89,8 @@ class Assert {
         Assert::assert_(is_string($var), defaultNullValue($message, 'not a string'));
     }
 
-    public static function assertCallable() {
-        # code...
+    public static function assertCallable($var, $message = null) {
+        Assert::assert_(is_callable($var), defaultNullValue($message, "it's not callable"));
     }
 
 }
