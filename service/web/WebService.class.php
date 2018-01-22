@@ -7,6 +7,13 @@
  */
 abstract class WebService extends Service implements IRouteDelegate {
 
+    public function dojetDidStart() {
+        $uri = $this->uriWillRoute($_SERVER['REQUEST_URI']);
+        $router = $this->router();
+        Assert::assert_($router instanceof IRoutable, 'illegal router');
+        $action = $router->route($uri);
+    }
+
     protected function router() {
         return new Router($this);
     }
@@ -14,13 +21,6 @@ abstract class WebService extends Service implements IRouteDelegate {
     public function uriWillRoute($uri) {
         $uri = substr($uri, 1);
         return $uri;
-    }
-
-    public function dojetDidStart() {
-        $uri = $this->uriWillRoute($_SERVER['REQUEST_URI']);
-        $router = $this->router();
-        Assert::assert_($router instanceof IRoutable, 'illegal router');
-        $action = $router->route($uri);
     }
 
     public function routeFinished($action) {

@@ -21,7 +21,6 @@ class Router implements IRoutable {
     public function route($uri) {
         $action = null;
         foreach (self::$routes as $routeRegx => $actionInfo) {
-            var_dump($uri, $routeRegx);
             if ( preg_match($routeRegx, $uri, $reg) ) {
                 foreach ($reg as $key => $value) {
                     MRequest::param($key, $value);
