@@ -1,15 +1,14 @@
 <?php
-define('DOJET', __DIR__.'/');
-
-require DOJET.'util/global_function.php';
-require DOJET.'kernel/Autoloader.php';
+require __DIR__.DIRECTORY_SEPARATOR.'util/global_function.php';
+require __DIR__.DIRECTORY_SEPARATOR.'kernel/Autoloader.php';
 
 $autoloader = Autoloader::getInstance();
 $autoloader->addAutoloadPath([
-    DOJET.'kernel/',
-    DOJET.'util/',
-    DOJET.'service/',
-    DOJET.'service/web/',
+    __DIR__.DIRECTORY_SEPARATOR.'kernel/',
+    __DIR__.DIRECTORY_SEPARATOR.'util/',
+    __DIR__.DIRECTORY_SEPARATOR.'service/',
+    __DIR__.DIRECTORY_SEPARATOR.'service/web/',
+    __DIR__.DIRECTORY_SEPARATOR.'service/cli/',
 ]);
 Autoloader::addAutoloader([$autoloader, 'autoload']);
 

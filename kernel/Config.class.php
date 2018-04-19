@@ -14,7 +14,7 @@ class Config {
         if (!file_exists($filename)) {
             $filename = $confFile.'.conf.php';
         }
-        Assert::assertFileExists($filename, 'config file not exist! '.$filename);
+        DAssert::assertFileExists($filename, 'config file not exist! '.$filename);
         require($filename);
     }
 

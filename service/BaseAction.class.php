@@ -9,8 +9,13 @@ abstract class BaseAction {
 
     protected $tplData;
 
-    function __construct() {
+    final function __construct(WebService $webService) {
         $this->tplData = [];
+        $this->init($webService);
+    }
+
+    protected function init(WebService $webService) {
+
     }
 
     /**
@@ -34,7 +39,7 @@ abstract class BaseAction {
         }
 
         $templateFile = $template;
-        Assert::assertFileExists($templateFile, 'template not exist. '.$template);
+        DAssert::assertFileExists($templateFile, 'template not exist. '.$template);
 
         $collision = extract($this->tplData, EXTR_PREFIX_ALL, 'tpl');
 

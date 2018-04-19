@@ -1,11 +1,11 @@
 <?php
 /**
- * Assert
+ * DAssert
  *
  * @author liyan
  * @since  2014
  */
-class Assert {
+class DAssert {
 
     /**
      * 封装断言
@@ -13,7 +13,7 @@ class Assert {
      * @param bool $condition
      * @param string $message
      */
-    public static function assert_($condition, $message = null) {
+    public static function assert($condition, $message = null) {
 
         if ($condition) {
             return ;
@@ -39,7 +39,7 @@ class Assert {
     public static function assertNumeric($var) {
         $args = func_get_args();
         foreach ($args as $var) {
-            Assert::assert_(is_numeric($var), 'nan, '.var_export($var, true));
+            DAssert::assert(is_numeric($var), 'nan, '.var_export($var, true));
         }
     }
 
@@ -49,9 +49,9 @@ class Assert {
      * @param mix $array
      */
     public static function assertNumericArray($array) {
-        Assert::assertArray($array);
+        DAssert::assertArray($array);
         foreach ($array as $val) {
-            Assert::assertNumeric($val);
+            DAssert::assertNumeric($val);
         }
     }
 
@@ -61,36 +61,36 @@ class Assert {
      * @param mix $array
      */
     public static function assertNotEmptyNumericArray($array) {
-        Assert::assert_(!empty($array), 'array should not be empty');
-        Assert::assertNumericArray($array);
+        DAssert::assert(!empty($array), 'array should not be empty');
+        DAssert::assertNumericArray($array);
     }
 
     public static function assertArray($var, $message = null) {
-        Assert::assert_(is_array($var), defaultNullValue($message, 'not an array'));
+        DAssert::assert(is_array($var), defaultNullValue($message, 'not an array'));
     }
 
     public static function assertKeyExists($key, $array, $message = null) {
-        Assert::assert_(array_key_exists($key, $array), defaultNullValue($message, 'key not exists'));
+        DAssert::assert(array_key_exists($key, $array), defaultNullValue($message, 'key not exists'));
     }
 
     public static function assertFileExists($filename, $message = null) {
-        Assert::assert_(file_exists($filename), defaultNullValue($message, "$filename not exists"));
+        DAssert::assert(file_exists($filename), defaultNullValue($message, "$filename not exists"));
     }
 
     public static function assertNotFalse($condition, $message = null) {
-        Assert::assert_(false !== $condition, defaultNullValue($message, "value can not be false"));
+        DAssert::assert(false !== $condition, defaultNullValue($message, "value can not be false"));
     }
 
     public static function assertNotNull($condition, $message = null) {
-        Assert::assert_(null !== $condition, defaultNullValue($message, "value can not be null"));
+        DAssert::assert(null !== $condition, defaultNullValue($message, "value can not be null"));
     }
 
     public static function assertString($var, $message = null) {
-        Assert::assert_(is_string($var), defaultNullValue($message, 'not a string'));
+        DAssert::assert(is_string($var), defaultNullValue($message, 'not a string'));
     }
 
     public static function assertCallable($var, $message = null) {
-        Assert::assert_(is_callable($var), defaultNullValue($message, "it's not callable"));
+        DAssert::assert(is_callable($var), defaultNullValue($message, "it's not callable"));
     }
 
 }

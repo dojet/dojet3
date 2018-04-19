@@ -10,7 +10,7 @@ abstract class WebService extends Service implements IRouteDelegate {
     public function dojetDidStart() {
         $uri = $this->uriWillRoute($_SERVER['REQUEST_URI']);
         $router = $this->router();
-        Assert::assert_($router instanceof IRoutable, 'illegal router');
+        DAssert::assert($router instanceof IRoutable, 'illegal router');
         $action = $router->route($uri);
     }
 
@@ -25,13 +25,13 @@ abstract class WebService extends Service implements IRouteDelegate {
 
     public function routeFinished($action) {
         $classFile = $action.'.class.php';
-        Assert::assertFileExists($classFile, 'action class not exists. file: '.$classFile);
+        DAssert::assertFileExists($classFile, 'action class not exists. file: '.$classFile);
         require $classFile;
 
         $className = basename($action);
-        $actionIns = new $className;
+        $actionIns = new $className($this);
 
-        Assert::assert_($actionIns instanceof BaseAction, 'illegal action');
+        DAssert::assert($actionIns instanceof BaseAction, 'illegal action');
 
         $actionIns->execute();
     }

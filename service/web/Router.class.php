@@ -19,22 +19,17 @@ class Router implements IRoutable {
     }
 
     public function route($uri) {
-        $action = null;
         foreach (self::$routes as $routeRegx => $actionInfo) {
             if ( preg_match($routeRegx, $uri, $reg) ) {
                 foreach ($reg as $key => $value) {
                     MRequest::param($key, $value);
                 }
                 $action = $actionInfo;
-                break;
+                return $this->delegate->routeFinished($action);
             }
         }
 
-        if (is_null($action)) {
-            $this->delegate->notFound($uri);
-            return;
-        }
-        $this->delegate->routeFinished($action);
+        return $this->delegate->notFound($uri);
     }
 
 }
